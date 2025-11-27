@@ -1,0 +1,51 @@
+---
+title: "Analyse"
+author: "Dorsa Aghajani"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+## R Markdown
+```{r}
+library(carData)    # pour TitanicSurvival
+library(dplyr)      # pour la manipulation de données
+library(ggplot2)    # pour les graphiques
+```
+
+#Chargement des données
+
+```{r}
+data("TitanicSurvival")
+titanic <- TitanicSurvival
+head(titanic)
+```
+
+#Présentation des données
+
+```{r}
+str(titanic)
+```
+```{r}
+summary(titanic)
+```
+#Statistiques descriptives détaillées
+```{r}
+titanic_clean <- titanic %>%
+filter(!is.na(age))
+summary(titanic_clean$age)
+```
+
+Répartition des passagers par sexe et par classe :
+```{r}
+table(titanic$sex)
+table(titanic$passengerClass)
+table(titanic$survived)
+```
+
+
+
+
+
+
