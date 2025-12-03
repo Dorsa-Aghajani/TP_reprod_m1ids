@@ -7,6 +7,14 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
+
+```{r libs, message=FALSE}
+library(TitanicPackage)
+library(carData)
+
+data("TitanicSurvival")
+titanic <- TitanicSurvival
+```
 ## R Markdown
 ```{r}
 library(carData)    # pour TitanicSurvival
@@ -21,9 +29,10 @@ data("TitanicSurvival")
 titanic <- TitanicSurvival
 head(titanic)
 ```
+Le jeu de données TitanicSurvival contient des informations sur les passagers du Titanic : âge, sexe, classe du billet et statut de survie.
 
 #Présentation des données
-
+Les variables principales sont : survived (survie), sex, passengerClass et age.
 ```{r}
 str(titanic)
 ```
@@ -43,9 +52,54 @@ table(titanic$sex)
 table(titanic$passengerClass)
 table(titanic$survived)
 ```
+La majorité des passagers sont des hommes et des passagers de 3ᵉ classe.
+La proportion de survivants est inférieure à celle des non-survivants.
 
+#Visualisation de la survie
+Survie selon le sexe:
+```{r}
+ggplot(titanic, aes(x = sex, fill = survived)) +
+geom_bar(position = "fill") +
+labs(x = "Sexe", y = "Proportion",
+title = "Proportion de survivants selon le sexe") +
+scale_y_continuous(labels = scales::percent)
 
+```
+Les femmes survivent beaucoup plus souvent que les hommes, ce qui correspond aux priorités d'évacuation.
+Survie selon la classe:
+```{r}
+ggplot(titanic, aes(x = passengerClass, fill = survived)) +
+geom_bar(position = "fill") +
+labs(x = "Classe", y = "Proportion",
+title = "Proportion de survivants selon la classe") +
+scale_y_continuous(labels = scales::percent)
 
+```
+Les passagers de 1ʳᵉ classe ont nettement plus de chances de survie, tandis que ceux de 3ᵉ classe sont les plus touchés.
+
+#Âge en fonction du statut de survie 
+```{r}
+titanic_clean <- titanic[!is.na(titanic$age), ]
+
+ggplot(titanic_clean, aes(x = survived, y = age)) +
+geom_boxplot() +
+labs(title = "Âge des passagers selon la survie",
+x = "Survie", y = "Âge")
+
+```
+Les survivants semblent légèrement plus jeunes en moyenne, mais les distributions restent proches.
+
+```{r}
+library(TitanicPackage)
+library(carData)
+
+data("TitanicSurvival")
+
+taux_survie_classe(TitanicSurvival)
+taux_survie_sexe(TitanicSurvival)
+```
+Les fonctions du package `TitanicPackage` permettent de calculer automatiquement les taux de survie selon la classe et le sexe.  
+On retrouve les mêmes conclusions : meilleure survie en 1ʳᵉ classe et chez les femmes.
 
 
 
